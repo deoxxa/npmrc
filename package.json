@@ -1,0 +1,20 @@
+{
+  "name": "npmrc",
+  "version": "0.0.0",
+  "description": "Switch between different .npmrc files with ease and grace",
+  "preferGlobal": true,
+  "bin": {
+    "npmrc": "./npmrc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/deoxxa/npmrc.git"
+  },
+  "keywords": [
+    "npmrc",
+    "utility",
+    "shell"
+  ],
+  "author": "Conrad Pankoff <deoxxa@fknsrs.biz> (http://www.fknsrs.biz/)",
+  "license": "BSD"
+}

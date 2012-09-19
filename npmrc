@@ -1,0 +1,41 @@
+#!/bin/sh
+
+NPMRC_STORE="${HOME}/.npmrcs";
+NPMRC="${HOME}/.npmrc";
+
+if [ "x${1}" = "x" ]; then
+  echo "Available npmrcs:";
+  echo;
+  find "${NPMRC_STORE}" -type f | while read FILE; do
+    if [ "$(readlink ${NPMRC})" = "${FILE}" ]; then
+      echo "* $(basename ${FILE})";
+    else
+      echo "  $(basename ${FILE})";
+    fi;
+  done;
+
+  exit 0;
+fi;
+
+if [ ! -e "${NPMRC_STORE}/${1}" ]; then
+  echo "Couldn't find npmrc file '${1}', looked in ${NPMRC_STORE}/${1}";
+  exit 1;
+fi;
+
+if [ -e "${NPMRC}" ]; then
+  if [ ! -h "${NPMRC}" ]; then
+    echo "Current .npmrc (${NPMRC}) is not a regular file, not removing it";
+    exit 1;
+  fi;
+
+  if [ "$(readlink ${NPMRC})" = "${NPMRC_STORE}/${1}" ]; then
+    echo "Current .npmrc (${NPMRC}) is already '${1}' (${NPMRC_STORE}/${1})";
+    exit 1;
+  fi;
+
+  echo "Removing old .npmrc ($(readlink ${NPMRC}))";
+  rm "${NPMRC}" || exit 1;
+fi;
+
+echo "Activating .npmrc '${1}'";
+ln -s "${NPMRC_STORE}/${1}" "${NPMRC}" || exit 1;
