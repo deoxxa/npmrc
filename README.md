@@ -18,6 +18,10 @@ Also it's written in posix sh, so it should work basically everywhere.
 Usage
 -----
 
+``` sh
+npm install -g npmrc
+```
+
 `npmrc` by default looks for profiles in `~/.npmrcs/`, but this can be
 overridden with the `NPMRC_STORE` environment variable. It also, by default,
 thinks that .npmrc is in `~/.npmrc`, but this can be overridden with the `NPMRC`
