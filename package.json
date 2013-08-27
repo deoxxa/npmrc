@@ -1,6 +1,6 @@
 {
   "name": "npmrc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Switch between different .npmrc files with ease and grace",
   "preferGlobal": true,
   "bin": {
