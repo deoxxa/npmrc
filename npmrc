@@ -43,7 +43,7 @@ fi;
 
 if [ -e "${NPMRC}" ]; then
   if [ ! -h "${NPMRC}" ]; then
-    echo "Current .npmrc (${NPMRC}) is not a regular file, not removing it";
+    echo "Current .npmrc (${NPMRC}) is not a symlink. You may want to copy it into ${NPMRC_STORE}";
     exit 1;
   fi;
 
