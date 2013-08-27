@@ -3,6 +3,25 @@
 NPMRC_STORE="${HOME}/.npmrcs";
 NPMRC="${HOME}/.npmrc";
 
+if [ ! -d "$NPMRC_STORE" ]; then
+  echo "Initialising npmrcs..."
+  echo "Creating ${NPMRC_STORE}"
+  mkdir ${NPMRC_STORE}
+
+  # create default npmrc if it doesn't exist
+  if [ ! -e "${NPMRC}" ]; then
+    touch ${NPMRC_STORE}/default
+  else
+    # make existing config 'default'
+    echo "Making ${NPMRC} the default npmrc file"
+    mv ${NPMRC} ${NPMRC_STORE}/default
+  fi;
+
+  # use the config we just created
+  $0 default
+  exit $?
+fi
+
 if [ "x${1}" = "x" ]; then
   echo "Available npmrcs:";
   echo;
