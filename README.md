@@ -37,7 +37,7 @@ Making /Users/conrad/.npmrc the default npmrc file
 Activating .npmrc 'default'
 ```
 
-#### List available npmrcs
+#### List available .npmrc profiles
 
 ```
 ➜  ~  npmrc 
@@ -47,7 +47,7 @@ Available npmrcs:
   work
 ```
 
-### Switch to a specific .npmrc 
+#### Switch to a specific .npmrc 
 
 ```
 ➜  ~  npmrc work
