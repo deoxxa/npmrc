@@ -15,53 +15,69 @@ you from your own stupid self by making sure you don't accidentally overwrite an
 
 Also it's written in posix sh, so it should work basically everywhere.
 
-Usage
------
+Installation
+------------
 
 ``` sh
 npm install -g npmrc
 ```
 
-`npmrc` by default looks for profiles in `~/.npmrcs/`, but this can be
-overridden with the `NPMRC_STORE` environment variable. It also, by default,
-thinks that .npmrc is in `~/.npmrc`, but this can be overridden with the `NPMRC`
-environment variable.
+Usage
+-----
 
-Use `npmrc` on its own to list your .npmrc profiles. It works like so:
+#### Initialisation
+
+Calling `npmrc` without arguments creates an `~/.npmrcs/` directory if it doesn't exist,
+and copies your current `~/.npmrc` as the 'default' .npmrc profile.
+
+```
+➜  ~  npmrc
+Creating /Users/conrad/.npmrcs
+Making /Users/conrad/.npmrc the default npmrc file
+Activating .npmrc 'default'
+```
+
+#### List available npmrcs
 
 ```
 ➜  ~  npmrc 
 Available npmrcs:
     
-* public
+* default
   work
 ```
 
-Use `npmrc <name>` to switch to a specific .npmrc file. It looks like this:
+### Switch to a specific .npmrc 
 
 ```
 ➜  ~  npmrc work
-Removing old .npmrc (/Users/conrad/.npmrcs/public)
+Removing old .npmrc (/Users/conrad/.npmrcs/default)
 Activating .npmrc 'work'
 ```
 
 `npmrc <name>` will also go to some lengths to make sure you don't overwrite
-anything you might care about.
+anything you might care about:
 
 ```
-➜  ~  npmrc public
+➜  ~  npmrc default
 Removing old .npmrc (/Users/conrad/.npmrcs/work)
-Activating .npmrc 'public'
-➜  ~  npmrc public  
-Current .npmrc (/Users/conrad/.npmrc) is already 'public' (/Users/conrad/.npmrcs/public)
+Activating .npmrc 'default'
+➜  ~  npmrc default  
+Current .npmrc (/Users/conrad/.npmrc) is already 'default' (/Users/conrad/.npmrcs/default)
 ➜  ~  rm ~/.npmrc
 ➜  ~  touch ~/.npmrc
-➜  ~  npmrc public
+➜  ~  npmrc default
 Current .npmrc (/Users/conrad/.npmrc) is not a regular file, not removing it
 ➜  ~  rm ~/.npmrc
-➜  ~  npmrc public
-Activating .npmrc 'public'
+➜  ~  npmrc default
+Activating .npmrc 'default'
 ```
+
+Environment Variables
+---------------------
+
+* `NPMRC_STORE` - Path to directory of profiles. Default: `~/.npmrcs/`
+* `NPMRC` - Path to the npmrc file used by npm. Default: `~/.npmrc`
 
 License
 -------
