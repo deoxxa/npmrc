@@ -72,6 +72,15 @@ Removing old .npmrc (/Users/conrad/.npmrcs/default)
 Activating .npmrc 'work'
 ```
 
+You can also pass only the first few characters of a profile and `npmrc` will
+autocomplete the profile's name.
+
+```
+➜  ~  npmrc def
+Removing old .npmrc (/Users/conrad/.npmrcs/work)
+Activating .npmrc 'default'
+```
+
 `npmrc <name>` will also go to some lengths to make sure you don't overwrite
 anything you might care about:
 
