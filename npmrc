@@ -53,7 +53,13 @@ fi;
 
 if [ ! -e "${NPMRC_STORE}/${1}" ]; then
   FILES=$(find "${NPMRC_STORE}" -name "${1}*")
-  read RESULTS <<< $(echo "$FILES" | wc -l)
+
+  # As $(echo "" | wc -l) will also return 1 we explicitly check if $FILES is empty
+  if [ "x${FILES}" = "x" ]; then
+    RESULTS=0
+  else
+    RESULTS=$(echo "$FILES" | wc -l)
+  fi;
 
   if [ $RESULTS = 1 ]; then
     $0 $(basename $FILES)
