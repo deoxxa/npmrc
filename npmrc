@@ -68,18 +68,6 @@ if [ "x${1}" = "x" ]; then
   exit 0;
 fi;
 
-if [ -e "${NPMRC}" ]; then
-  if [ ! -h "${NPMRC}" ]; then
-    echo "Current .npmrc (${NPMRC}) is not a symlink. You may want to copy it into ${NPMRC_STORE}";
-    exit 1;
-  fi;
-
-  if [ "$(readlink ${NPMRC})" = "${NPMRC_STORE}/${1}" ]; then
-    echo "Current .npmrc (${NPMRC}) is already '${1}' (${NPMRC_STORE}/${1})";
-    exit 1;
-  fi;
-fi;
-
 if [ "${1}" = "--create" -o "${1}" = "-c" ]; then
   if [ "x${2}" = "x" ]; then
     echo "What do you want to call your new npm configuration?"
@@ -97,5 +85,43 @@ if [ "${1}" = "--create" -o "${1}" = "-c" ]; then
   activate $2
   exit 0;
 fi
+
+if [ ! -e "${NPMRC_STORE}/${1}" ]; then
+  FILES=$(find "${NPMRC_STORE}" -name "${1}*")
+  read RESULTS <<< $(echo "$FILES" | wc -l)
+
+  if [ $RESULTS = 1 ]; then
+    $0 $(basename $FILES)
+    exit $?
+  elif [ $RESULTS -gt 1 ]; then
+    echo "'${1}' is ambiguous. Found multiple matching npmrcs:"
+    echo;
+
+    echo "$FILES" | while read FILE; do
+      if [ "$(readlink ${NPMRC})" = "${FILE}" ]; then
+        echo "* $(basename ${FILE})";
+      else
+        echo "  $(basename ${FILE})";
+      fi;
+    done;
+
+    exit 1;
+  fi
+
+  echo "Couldn't find npmrc file '${1}', looked in ${NPMRC_STORE}/${1}";
+  exit 1;
+fi;
+
+if [ -e "${NPMRC}" ]; then
+  if [ ! -h "${NPMRC}" ]; then
+    echo "Current .npmrc (${NPMRC}) is not a symlink. You may want to copy it into ${NPMRC_STORE}";
+    exit 1;
+  fi;
+
+  if [ "$(readlink ${NPMRC})" = "${NPMRC_STORE}/${1}" ]; then
+    echo "Current .npmrc (${NPMRC}) is already '${1}' (${NPMRC_STORE}/${1})";
+    exit 1;
+  fi;
+fi;
 
 activate $1
