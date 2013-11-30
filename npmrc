@@ -4,7 +4,7 @@ NPMRC_STORE="${HOME}/.npmrcs";
 NPMRC="${HOME}/.npmrc";
 
 if [ "${1}" = "--help" -o "${1}" = "-h" ]; then
-  echo "npmrcs"
+  echo "npmrc"
   echo ""
   echo "  Switch between different .npmrc files with ease and grace."
   echo ""
@@ -13,13 +13,13 @@ if [ "${1}" = "--help" -o "${1}" = "-h" ]; then
   echo "Example:"
   echo "  Creating and activating a new .npmrc called 'work':"
   echo "  > touch ~/.npmrcs/work"
-  echo "  > npmrcs work"
+  echo "  > npmrc work"
   exit 1
 fi
 
 # init ~/.npmrc & ~/npmrc/default
 if [ ! -d "$NPMRC_STORE" ]; then
-  echo "Initialising npmrcs..."
+  echo "Initialising npmrc..."
   echo "Creating ${NPMRC_STORE}"
   mkdir ${NPMRC_STORE}
 
