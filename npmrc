@@ -52,6 +52,27 @@ if [ "x${1}" = "x" ]; then
 fi;
 
 if [ ! -e "${NPMRC_STORE}/${1}" ]; then
+  FILES=$(find "${NPMRC_STORE}" -name "${1}*")
+  read RESULTS <<< $(echo "$FILES" | wc -l)
+
+  if [ $RESULTS = 1 ]; then
+    $0 $(basename $FILES)
+    exit $?
+  elif [ $RESULTS -gt 1 ]; then
+    echo "'${1}' is ambiguous. Found multiple matching npmrcs:"
+    echo;
+
+    echo "$FILES" | while read FILE; do
+      if [ "$(readlink ${NPMRC})" = "${FILE}" ]; then
+        echo "* $(basename ${FILE})";
+      else
+        echo "  $(basename ${FILE})";
+      fi;
+    done;
+
+    exit 1;
+  fi
+
   echo "Couldn't find npmrc file '${1}', looked in ${NPMRC_STORE}/${1}";
   exit 1;
 fi;
