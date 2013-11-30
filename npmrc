@@ -3,7 +3,7 @@
 NPMRC_STORE="${HOME}/.npmrcs";
 NPMRC="${HOME}/.npmrc";
 
-if [ "${1}" == "--help" -o "${1}" == "-h" ]; then
+if [ "${1}" = "--help" -o "${1}" = "-h" ]; then
   echo "npmrcs"
   echo ""
   echo "  Switch between different .npmrc files with ease and grace."
