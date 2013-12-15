@@ -37,6 +37,23 @@ Making /Users/conrad/.npmrc the default npmrc file
 Activating .npmrc 'default'
 ```
 
+#### Create a new .npmrc profile
+
+```
+➜  ~  npmrc -c newprofile
+Removing old .npmrc (/home/rvagg/.npmrcs/default)
+Activating .npmrc 'newprofile'
+```
+
+A blank profile will be created. To point your profile to a non-default registry:
+
+```
+➜  ~  npm config set registry http://npm.nodejs.org.au:5984/registry/_design/app/_rewrite
+```
+
+Then use `npm adduser` or `npm login` to authenticate with the new profile.
+
+
 #### List available .npmrc profiles
 
 ```
