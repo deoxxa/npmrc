@@ -116,3 +116,11 @@ Contact
 * GitHub ([deoxxa](http://github.com/deoxxa))
 * Twitter ([@deoxxa](http://twitter.com/deoxxa))
 * Email ([deoxxa@fknsrs.biz](mailto:deoxxa@fknsrs.biz))
+
+Awesome People
+--------------
+
+* Jaime "the binary wizard" Pillora ([github](https://github.com/jpillora))
+* Tim "two hands" Oxley ([github](https://github.com/timoxley))
+* Jakob "fastest blur in the west" Krigovsky ([github](https://github.com/SonicHedgehog))
+* Rod "the destroyer" Vagg ([github](https://github.com/rvagg))
