@@ -14,7 +14,7 @@ activate() {
     exit 1;
   fi;
 
-  echo "Removing old .npmrc ($(readlink ${NPMRC}))";
+  echo "Disabling .npmrc ($(readlink ${NPMRC}))";
   rm -f "${NPMRC}" || exit 1;
 
   echo "Activating .npmrc '${1}'";
