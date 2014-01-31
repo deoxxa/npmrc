@@ -57,7 +57,7 @@ fi
 if [ "x${1}" = "x" ]; then
   echo "Available npmrcs:";
   echo;
-  find "${NPMRC_STORE}" -type f | while read FILE; do
+  find "${NPMRC_STORE}/" -type f | while read FILE; do
     if [ "$(readlink ${NPMRC})" = "${FILE}" ]; then
       echo "* $(basename ${FILE})";
     else
@@ -87,7 +87,7 @@ if [ "${1}" = "--create" -o "${1}" = "-c" ]; then
 fi
 
 if [ ! -e "${NPMRC_STORE}/${1}" ]; then
-  FILES=$(find "${NPMRC_STORE}" -name "${1}*")
+  FILES=$(find "${NPMRC_STORE}/" -name "${1}*")
 
   # As $(echo "" | wc -l) will also return 1 we explicitly check if $FILES is empty
   if [ "x${FILES}" = "x" ]; then
