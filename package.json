@@ -4,7 +4,7 @@
   "description": "Switch between different .npmrc files with ease and grace",
   "preferGlobal": true,
   "bin": {
-    "npmrc": "./npmrc"
+    "npmrc": "./npmrc.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,14 @@
     "shell"
   ],
   "author": "Conrad Pankoff <deoxxa@fknsrs.biz> (http://www.fknsrs.biz/)",
-  "license": "BSD"
+  "license": "BSD",
+  "devDependencies": {
+    "rimraf": "*",
+    "mkdirp": "*",
+    "tape": "*",
+    "xtend": "*"
+  },
+  "scripts": {
+    "test": "tape test.js"
+  }
 }

@@ -13,7 +13,6 @@ switch out your .npmrc with a specific named version. It also tries to protect
 you from your own stupid self by making sure you don't accidentally overwrite an
 .npmrc that you actually want to keep.
 
-Also it's written in posix sh, so it should work basically everywhere.
 
 Installation
 ------------
@@ -98,6 +97,11 @@ Current .npmrc (/Users/conrad/.npmrc) is not a regular file, not removing it
 ➜  ~  npmrc default
 Activating .npmrc 'default'
 ```
+
+Note For Windows Users
+----------------------
+
+You may have to run npmrc in a shell (cmd, PowerShell, Git Bash, etc) with elevated (Admiistratory) privileges to get it to run.
 
 Environment Variables
 ---------------------
