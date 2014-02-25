@@ -139,7 +139,7 @@ npm http 200 http://registry.npmjs.eu/npmrc
 
 # switch back to default npmrc
 ➜  ~  npmrc default
-Removing old .npmrc (/Users/timoxley/.npmrcs/eu)
+Removing old .npmrc (/Users/conrad/.npmrcs/eu)
 Activating .npmrc 'default'
 
 # check npm returns to using default mirror
