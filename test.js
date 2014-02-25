@@ -108,7 +108,6 @@ test('switch config', function (t) {
 
 
 test('list config', function (t) {
-  var foobar = path.join(npmrcs, 'foobar')
   exec(cmd, options, function (err, stdout, stderr) {
     t.notOk(err, 'no error')
     t.equal(stderr, '', 'no stderr')
@@ -121,13 +120,83 @@ test('list config', function (t) {
 
 
 test('switch to non-existent config', function (t) {
-  var foobar = path.join(npmrcs, 'foobar')
   exec(cmd + ' doobar', options, function (err, stdout, stderr) {
     t.ok(err, 'got error')
     t.equal(err.code, 1, 'got correct exit code')
     t.equal(stdout, '', 'no stdout')
-    t.ok(/Couldn't find npmrc file .+doobar/.test(stderr), 'got expected error message')
+    t.ok(/Couldn't find npmrc file "doobar"/.test(stderr), 'got expected error message')
     t.end()
+  })
+})
+
+
+test('partial matching start of npmrc', function (t) {
+  exec(cmd + ' foo', options, function (err, stdout, stderr) {
+    t.notOk(err, 'no error')
+    t.equal(stderr, '', 'no stderr')
+    t.ok(/Activating .npmrc "foobar"/.test(stdout), 'got "activating" msg')
+    t.end()
+  })
+})
+
+
+test('partial matching prefers full match over partial', function (t) {
+  exec(cmd + ' -c foo', options, function (err, stdout, stderr) {
+  // create foo
+    t.notOk(err, 'no error')
+    // match against foobar should pick foobar not foo
+    exec(cmd + ' foobar', options, function (err, stdout, stderr) {
+      t.notOk(err, 'no error')
+      t.equal(stderr, '', 'no stderr')
+      t.ok(/Activating .npmrc "foobar"/.test(stdout), 'got "activating" msg')
+      t.end()
+    })
+  })
+})
+
+
+test('partial matching prefers start of word match over partial match', function (t) {
+  exec(cmd + ' -c bar', options, function (err, stdout, stderr) { // create bar
+    t.notOk(err, 'no error')
+    exec(cmd + ' default', options, function (err, stdout, stderr) { // switch to default
+      t.notOk(err, 'no error')
+      exec(cmd + ' ba', options, function (err, stdout, stderr) {
+        // ensure 'ba' switches to bar not foobar.
+        t.notOk(err, 'no error')
+        t.equal(stderr, '', 'no stderr')
+        t.ok(/Activating .npmrc "bar"/.test(stdout), 'got "activating" msg')
+        t.end()
+      })
+    })
+  })
+})
+
+
+test('partial matching can match any part of npmrc', function (t) {
+  exec(cmd + ' ooba', options, function (err, stdout, stderr) {
+    t.notOk(err, 'no error')
+    t.equal(stderr, '', 'no stderr')
+    t.ok(/Activating .npmrc "foobar"/.test(stdout), 'got "activating" msg')
+    t.end()
+  })
+})
+
+
+test('partial matching matches alphabetically', function (t) {
+  exec(cmd + ' -c car', options, function (err, stdout, stderr) { // create car
+    t.notOk(err, 'no error')
+    exec(cmd + ' default', options, function (err, stdout, stderr) { // switch to default
+      t.notOk(err, 'no error')
+      var foobar = path.join(npmrcs, 'foobar')
+      // try match ar from bar, car, foobar
+      // should pick bar
+      exec(cmd + ' ar', options, function (err, stdout, stderr) {
+        t.notOk(err, 'no error')
+        t.equal(stderr, '', 'no stderr')
+        t.ok(/Activating .npmrc "bar"/.test(stdout), 'got "activating" msg')
+        t.end()
+      })
+    })
   })
 })
 
