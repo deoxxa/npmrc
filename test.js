@@ -108,7 +108,6 @@ test('switch config', function (t) {
 
 
 test('list config', function (t) {
-  var foobar = path.join(npmrcs, 'foobar')
   exec(cmd, options, function (err, stdout, stderr) {
     t.notOk(err, 'no error')
     t.equal(stderr, '', 'no stderr')
@@ -121,7 +120,6 @@ test('list config', function (t) {
 
 
 test('switch to non-existent config', function (t) {
-  var foobar = path.join(npmrcs, 'foobar')
   exec(cmd + ' doobar', options, function (err, stdout, stderr) {
     t.ok(err, 'got error')
     t.equal(err.code, 1, 'got correct exit code')
