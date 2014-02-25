@@ -56,14 +56,13 @@ function checkSymlink (stat) {
   }
 }
 
-
 // make the symlink
 function link (name) {
-  var ln = path.join(NPMRC_STORE, name)
+  var ln = path.join(NPMRC_STORE, name || '')
     , stat
 
-  if (!fs.existsSync(ln)) {
-    console.error('Couldn\'t find npmrc file %s', ln)
+  if (ln == NPMRC_STORE || !fs.existsSync(ln)) {
+    console.error('Couldn\'t find npmrc file "%s".', name)
     return process.exit(1)
   }
 
@@ -77,10 +76,32 @@ function link (name) {
     fs.unlinkSync(NPMRC)
   }
 
-  console.log('Activating .npmrc "%s"', name)
+  console.log('Activating .npmrc "%s"', path.basename(ln))
   fs.symlinkSync(ln, NPMRC, 'file')
 }
 
+// partial match npmrc names
+function partialMatch(match, files) {
+  files.sort() // own the sort order
+
+  // try exact match
+  var exactMatch = files.filter(function(file) {
+    return file === match
+  }).shift()
+  if (exactMatch) return exactMatch
+
+  // try starts with match
+  var matchesStart = files.filter(function(file) {
+    return file.indexOf(match) === 0
+  }).shift()
+  if (matchesStart) return matchesStart
+
+  // try whatever match
+  var matchesAnything = files.filter(function(file) {
+    return file.match(new RegExp(match))
+  }).shift()
+  if (matchesAnything) return matchesAnything
+}
 
 // simplistic cmdline parser, sets "name" as the first non-'-' arg
 // and sets "opts" as '-'-stripped characters (first char only)
@@ -144,23 +165,6 @@ if (!name && !opts.length)
   return printNpmrcs()
 
 
-// sanity/safety check, also check if they want to switch
-// to the already active one
-;(function checkExisting () {
-  var stat
-  try {
-    stat = fs.lstatSync(NPMRC)
-    checkSymlink(stat)
-  } catch (e) {
-    // ignore
-  }
-
-  if (name && stat && fs.readlinkSync(NPMRC) == path.join(NPMRC_STORE, name)) {
-    console.log('Current .npmrc (%s) is already "%s" (%s/%s)', NPMRC, name, NPMRC_STORE, name)
-    return process.exit(0)
-  }
-}())
-
 
 // handle -c <name>
 ;(function createNew () {
@@ -181,6 +185,24 @@ if (!name && !opts.length)
   fs.writeFileSync(c, '')
 }())
 
+if (name) name = partialMatch(name, fs.readdirSync(NPMRC_STORE)) || name
+
+// sanity/safety check, also check if they want to switch
+// to the already active one
+;(function checkExisting () {
+  var stat
+  try {
+    stat = fs.lstatSync(NPMRC)
+    checkSymlink(stat)
+  } catch (e) {
+    // ignore
+  }
+
+  if (name && stat && fs.readlinkSync(NPMRC) == path.join(NPMRC_STORE, name)) {
+    console.log('Current .npmrc (%s) is already "%s" (%s/%s)', NPMRC, name, NPMRC_STORE, name)
+    return process.exit(0)
+  }
+}())
 
 // if we got here, then we're ready to switch
 link(name)
