@@ -109,6 +109,47 @@ Environment Variables
 * `NPMRC_STORE` - Path to directory of profiles. Default: `~/.npmrcs/`
 * `NPMRC` - Path to the npmrc file used by npm. Default: `~/.npmrc`
 
+
+Known NPM Mirrors
+---------------------
+
+For your convenience:
+
+* Australia: http://npm.nodejs.org.au:5984/registry/_design/app/_rewrite
+* Europe: http://registry.npmjs.eu/
+
+Example – Creating a new npmrc to use the eu mirror:
+
+```bash
+# create new npmrc for europe
+➜  ~  npmrc -c eu 
+Removing old .npmrc (/Users/conrad/.npmrcs/default)
+Activating .npmrc 'eu'
+
+# set registry to europe
+# this will persist while using the eu npmrc
+➜  ~  npm set registry http://registry.npmjs.eu/
+
+# check npm is using europe mirror
+➜  ~  npm info npmrc 
+npm http GET http://registry.npmjs.eu/npmrc
+npm http 200 http://registry.npmjs.eu/npmrc
+...
+# success!
+
+# switch back to default npmrc
+➜  ~  npmrc default
+Removing old .npmrc (/Users/timoxley/.npmrcs/eu)
+Activating .npmrc 'default'
+
+# check npm returns to using default mirror
+➜  ~  npm info npmrc 
+npm http GET https://registry.npmjs.org/npmrc
+npm http 200 https://registry.npmjs.org/npmrc
+... 
+# success!
+```
+
 License
 -------
 
