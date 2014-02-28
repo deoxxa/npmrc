@@ -117,6 +117,7 @@ For your convenience:
 
 * Australia: http://npm.nodejs.org.au:5984/registry/_design/app/_rewrite
 * Europe: http://registry.npmjs.eu/
+* China: http://r.cnpmjs.org
 
 Example – Creating a new npmrc to use the eu mirror:
 
