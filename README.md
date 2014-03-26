@@ -101,7 +101,8 @@ Activating .npmrc 'default'
 Note For Windows Users
 ----------------------
 
-You may have to run npmrc in a shell (cmd, PowerShell, Git Bash, etc) with elevated (Admiistratory) privileges to get it to run.
+You may have to run npmrc in a shell (cmd, PowerShell, Git Bash, etc) with
+elevated (Administrative) privileges to get it to run.
 
 Environment Variables
 ---------------------
