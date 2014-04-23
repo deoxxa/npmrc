@@ -2,16 +2,30 @@
 
 const path = require('path')
     , fs   = require('fs')
+    , os = require('os');
 
 
 const NPMRC_STORE = process.env.NPM_STORE || path.join(process.env.HOME || process.env.USERPROFILE, '.npmrcs')
     , NPMRC       = process.env.NPMC || path.join(process.env.HOME || process.env.USERPROFILE, '.npmrc')
-    , USAGE       = 'Usage: npmrc [-c] [name]'
+    , registries    = {
+        au: 'http://registry.npmjs.org.au/'
+      , eu: 'http://registry.npmjs.eu/'
+      , ch: 'http://r.cnpmjs.org/'
+      , defaultReg: 'https://registry.npmjs.org/'
+    }
+    , USAGE       = 'Usage:\n'
+                  + '  npmrc [name]\n'
+                  + '  npmrc -c [name]\n'
+                  + '  npmrc -r [registry]'
+                  + '    The [registry] could be any of these values :\n'
+                  + '      au - for Australian reistry mirror\n'
+                  + '      eu - for European registry mirror\n'
+                  + '      ch - for Chinese registry mirror\n'
+                  + '      slow or default - for default registry\n'
 
 
 var opts
   , name
-
 
 function printUsage () {
   console.error(USAGE)
@@ -32,6 +46,8 @@ function printHelp () {
     + '  # Switch betwen "work" and "default"\n'
     + '  $ npmrc work\n'
     + '  $ npmrc default\n'
+    + '  # Use the Europe registry\n mirror'
+    + '  $ npmrc -r eu\n'
   )
   process.exit(1)
 }
@@ -115,7 +131,7 @@ function partialMatch(match, files) {
   })[0] // first non '-' arg
 
   opts.filter(function (o) {
-    if (o == 'c' || o == 'h') // other known opts go here
+    if (o == 'c' || o == 'h' || o == 'r' || o === 'registry') // other known opts go here
       return false
 
     console.error('Unknown option: -' + o)
@@ -165,12 +181,53 @@ if (!name && !opts.length)
   return printNpmrcs()
 
 
+;(function handleOPtions() {
+  if (~opts.indexOf('c'))
+    createNew()
+  else if (~opts.indexOf('r') || ~opts.indexOf('registry'))
+    replaceRegistry()
+}())
+
+// handle -r <name>
+function replaceRegistry() {
+  if (!name) {
+    console.error('Specify the registry you want to use')
+    return printUsage()
+  }
+
+  var registry = registries[(name === 'slow' || name === 'default') ? 'defaultReg' : name]
+    , fileContents
+
+  try {
+    fs.existsSync(NPMRC)
+  } catch (e) {
+    console.warn('Make sure a .npmrc file exits at %s.', NPMRC)
+    process.exit(1)
+  }
+
+  if (!registry) {
+    console.error('%s value is not a valid registry name', name)
+    printUsage()
+  }
+
+  fileContents = fs.readFileSync(NPMRC, 'utf-8').split(os.EOL)
+
+  for (var i = 0, l = fileContents.length; i <  l; i++) {
+    if (~fileContents[i].indexOf('registry')) {
+      fileContents[i] = 'registry = ' + registry
+      break;
+    }
+  }
+
+  if (i === l)
+    fileContents.unshift('registry = ' + registry)
+
+  fs.writeFileSync(NPMRC, fileContents.join(os.EOL))
+  process.exit(0)
+}
 
 // handle -c <name>
-;(function createNew () {
-  if (opts.indexOf('c') == -1)
-    return
-
+function createNew () {
   if (!name) {
     console.error('What do you want to call your new npm configuration?')
     return printUsage()
@@ -183,7 +240,8 @@ if (!name && !opts.length)
   }
 
   fs.writeFileSync(c, '')
-}())
+}
+
 
 if (name) name = partialMatch(name, fs.readdirSync(NPMRC_STORE)) || name
 

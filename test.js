@@ -1,5 +1,6 @@
 const test    = require('tape')
     , path    = require('path')
+    , os      = require('os')
     , fs      = require('fs')
     , rimraf  = require('rimraf')
     , mkdirp  = require('mkdirp')
@@ -9,7 +10,7 @@ const test    = require('tape')
 
     , cmd     = '"' + process.execPath + '" '
                 + path.join(__dirname, 'npmrc.js')
-    , homedir = path.join(tmpdir, 'npmrcs_test.' + process.pid)
+    , homedir = path.join(tmpdir, '.npmrcs_test.' + process.pid)
     , options = { env: xtend(process.env, { HOME: homedir }) }
     , npmrc   = path.join(homedir, '.npmrc')
     , npmrcs  = path.join(homedir, '.npmrcs')
@@ -30,6 +31,24 @@ test('blank slate', function (t) {
     t.ok(/Initialising/.test(stdout), 'got "initialising" msg')
     t.ok(/Creating .*\.npmrcs/.test(stdout), 'got "creating" msg')
     t.ok(/Activating .npmrc "default"/, 'got "activating" msg')
+    t.end()
+  })
+})
+
+test('change the registry url', function (t) {
+  exec(cmd + ' -r au', options, function (err, stdout, stderr) {
+    t.notOk(err, 'no error')
+    t.ok(fs.existsSync(npmrc), '.npmrc file exists')
+    t.ok(fs.existsSync(def), '.npmrc default file exists')
+    t.equal(fs.readFileSync(def, 'utf-8').split(os.EOL)[0], 'registry = http://registry.npmjs.org.au/', 'got the right registry url')
+    t.end()
+  })
+})
+
+test('error occurs when the wrong argument is supplied to -r', function (t) {
+  exec(cmd + ' -r foo', options, function (err, stdout, stderr) {
+    t.ok(err, 'error occured')
+    t.equal(err.code, 1, 'process exited with the right code')
     t.end()
   })
 })
