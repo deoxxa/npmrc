@@ -4,8 +4,8 @@ const path = require('path')
     , fs   = require('fs')
 
 
-const NPMRC_STORE = process.env.NPM_STORE || path.join(process.env.HOME || process.env.USERPROFILE, '.npmrcs')
-    , NPMRC       = process.env.NPMC || path.join(process.env.HOME || process.env.USERPROFILE, '.npmrc')
+const NPMRC_STORE = process.env.NPMRC_STORE || path.join(process.env.HOME || process.env.USERPROFILE, '.npmrcs')
+    , NPMRC       = process.env.NPMRC || path.join(process.env.HOME || process.env.USERPROFILE, '.npmrc')
     , USAGE       = 'Usage: npmrc [-c] [name]'
 
 
