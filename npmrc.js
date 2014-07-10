@@ -18,10 +18,10 @@ const NPMRC_STORE = process.env.NPMRC_STORE || path.join(process.env.HOME || pro
                   + '  npmrc -c [name]\n'
                   + '  npmrc -r [registry]'
                   + '    The [registry] could be any of these values :\n'
-                  + '      au - for Australian reistry mirror\n'
-                  + '      eu - for European registry mirror\n'
-                  + '      cn - for Chinese registry mirror\n'
-                  + '      slow or default - for default registry\n'
+                  + '      au - Australian reistry mirror\n'
+                  + '      eu - European registry mirror\n'
+                  + '      cn - Chinese registry mirror\n'
+                  + '      default - default npm registry\n'
 
 var opts
   , name
