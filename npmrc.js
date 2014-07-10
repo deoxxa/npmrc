@@ -221,6 +221,8 @@ function replaceRegistry() {
   if (i === l)
     fileContents.unshift('registry = ' + registry)
   fs.writeFileSync(NPMRC, fileContents.join(os.EOL))
+
+  console.log('Using %s registry.', registry)
   process.exit(0)
 }
 
