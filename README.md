@@ -174,3 +174,4 @@ Awesome People
 * Tim "two hands" Oxley ([github](https://github.com/timoxley))
 * Jakob "fastest blur in the west" Krigovsky ([github](https://github.com/SonicHedgehog))
 * Rod "the destroyer" Vagg ([github](https://github.com/rvagg))
+* Eugene "ludicrous gibs" Asiedu ([github](https://github.com/ngenerio))
