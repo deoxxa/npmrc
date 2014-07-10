@@ -24,6 +24,23 @@ npm install -g npmrc
 Usage
 -----
 
+```
+➜  ~  npmrc --help
+
+npmrc
+
+  Switch between different .npmrc files with ease and grace.
+
+Usage:
+  npmrc [name]
+  npmrc -c [name]
+  npmrc -r [registry]    The [registry] could be any of these values :
+      au - Australian reistry mirror
+      eu - European registry mirror
+      cn - Chinese registry mirror
+      default - default npm registry
+```
+
 #### Initialisation
 
 Calling `npmrc` without arguments creates an `~/.npmrcs/` directory if it doesn't exist,
@@ -110,46 +127,29 @@ Environment Variables
 * `NPMRC_STORE` - Path to directory of profiles. Default: `~/.npmrcs/`
 * `NPMRC` - Path to the npmrc file used by npm. Default: `~/.npmrc`
 
-
 Known npm registry Mirrors
 ---------------------
 
-For your convenience:
+For your convenience, you can change registries easily using the `-r`
+flag. Currently we provide aliases for:
 
-* Australia: http://registry.npmjs.org.au/
-* Europe: http://registry.npmjs.eu/
-* China: http://r.cnpmjs.org
+* [Australia](http://registry.npmjs.org.au/): `npmrc -r au`
+* [Europe](http://registry.npmjs.eu/): `npmrc -r eu`
+* [China](http://r.cnpmjs.org): `npmrc -r cn`
 
-Example – Creating a new npmrc to use the eu mirror:
+#### Switching registry example
 
-```bash
-# create new npmrc for europe
-➜  ~  npmrc -c eu 
-Removing old .npmrc (/Users/conrad/.npmrcs/default)
-Activating .npmrc 'eu'
-
-# set registry to europe
-# this will persist while using the eu npmrc
-➜  ~  npm set registry http://registry.npmjs.eu/
-
-# check npm is using europe mirror
-➜  ~  npm info npmrc 
+```
+➜  ~  npm -r eu
+Using eu registry
+➜  ~  npm info npmrc
 npm http GET http://registry.npmjs.eu/npmrc
-npm http 200 http://registry.npmjs.eu/npmrc
-...
-# success!
-
-# switch back to default npmrc
-➜  ~  npmrc default
-Removing old .npmrc (/Users/conrad/.npmrcs/eu)
-Activating .npmrc 'default'
-
-# check npm returns to using default mirror
-➜  ~  npm info npmrc 
+^C
+➜  ~  npm -r default
+Using default registry
+➜  ~  npm info npmrc
 npm http GET https://registry.npmjs.org/npmrc
-npm http 200 https://registry.npmjs.org/npmrc
-... 
-# success!
+^C
 ```
 
 License

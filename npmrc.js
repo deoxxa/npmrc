@@ -14,14 +14,14 @@ const NPMRC_STORE = process.env.NPMRC_STORE || path.join(process.env.HOME || pro
       , defaultReg: 'https://registry.npmjs.org/'
     }
     , USAGE       = 'Usage:\n'
-                  + '  npmrc [name]\n'
-                  + '  npmrc -c [name]\n'
-                  + '  npmrc -r [registry]'
-                  + '    The [registry] could be any of these values :\n'
-                  + '      au - Australian reistry mirror\n'
-                  + '      eu - European registry mirror\n'
-                  + '      cn - Chinese registry mirror\n'
-                  + '      default - default npm registry\n'
+                  + '  npmrc [name]                           change npmrc profile\n'
+                  + '  npmrc -c [name]                        create a new npmrc profile called name\n'
+                  + '  npmrc -r [registry]                    use an npm mirror'
+                  + '    [registry] can be one of:\n'
+                  + '      au      - Australian registry mirror\n'
+                  + '      eu      - European registry mirror\n'
+                  + '      cn      - Chinese registry mirror\n'
+                  + '      default - Default registry\n'
 
 var opts
   , name
@@ -45,7 +45,7 @@ function printHelp () {
     + '  # Switch betwen "work" and "default"\n'
     + '  $ npmrc work\n'
     + '  $ npmrc default\n'
-    + '  # Use the Europe registry\n mirror'
+    + '  # Use the European npm mirror'
     + '  $ npmrc -r eu\n'
   )
   process.exit(1)
