@@ -209,7 +209,7 @@ function replaceRegistry() {
     printUsage()
   }
 
-  fileContents = fs.readFileSync(NPMRC, 'utf-8').split(os.EOL)
+  fileContents = fs.readFileSync(NPMRC, 'utf8').split(os.EOL)
 
   for (var i = 0, l = fileContents.length; i <  l; i++) {
     if (~fileContents[i].indexOf('registry')) {
