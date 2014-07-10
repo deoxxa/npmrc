@@ -111,7 +111,7 @@ Environment Variables
 * `NPMRC` - Path to the npmrc file used by npm. Default: `~/.npmrc`
 
 
-Known NPM Mirrors
+Known npm registry Mirrors
 ---------------------
 
 For your convenience:
