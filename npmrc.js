@@ -10,7 +10,7 @@ const NPMRC_STORE = process.env.NPMRC_STORE || path.join(process.env.HOME || pro
     , registries    = {
         au: 'http://registry.npmjs.org.au/'
       , eu: 'http://registry.npmjs.eu/'
-      , ch: 'http://r.cnpmjs.org/'
+      , cn: 'http://r.cnpmjs.org/'
       , defaultReg: 'https://registry.npmjs.org/'
     }
     , USAGE       = 'Usage:\n'
@@ -20,7 +20,7 @@ const NPMRC_STORE = process.env.NPMRC_STORE || path.join(process.env.HOME || pro
                   + '    The [registry] could be any of these values :\n'
                   + '      au - for Australian reistry mirror\n'
                   + '      eu - for European registry mirror\n'
-                  + '      ch - for Chinese registry mirror\n'
+                  + '      cn - for Chinese registry mirror\n'
                   + '      slow or default - for default registry\n'
 
 var opts
