@@ -13,7 +13,8 @@
   "keywords": [
     "npmrc",
     "utility",
-    "shell"
+    "shell",
+    "npm"
   ],
   "author": "Conrad Pankoff <deoxxa@fknsrs.biz> (http://www.fknsrs.biz/)",
   "license": "BSD",
