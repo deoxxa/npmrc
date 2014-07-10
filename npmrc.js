@@ -14,14 +14,15 @@ const NPMRC_STORE = process.env.NPMRC_STORE || path.join(process.env.HOME || pro
       , defaultReg: 'https://registry.npmjs.org/'
     }
     , USAGE       = 'Usage:\n'
-                  + '  npmrc [name]                           change npmrc profile\n'
-                  + '  npmrc -c [name]                        create a new npmrc profile called name\n'
-                  + '  npmrc -r [registry]                    use an npm mirror'
-                  + '    [registry] can be one of:\n'
-                  + '      au      - Australian registry mirror\n'
-                  + '      eu      - European registry mirror\n'
-                  + '      cn      - Chinese registry mirror\n'
-                  + '      default - Default registry\n'
+                  + '  npmrc                 list all profiles\n'
+                  + '  npmrc [name]          change npmrc profile (uses fuzzy matching)\n'
+                  + '  npmrc -c [name]       create a new npmrc profile called name\n'
+                  + '  npmrc -r [registry]   use an npm mirror\n\n'
+                  + 'Available mirrors for npmrc -r:\n'
+                  + '  au      - Australian registry mirror\n'
+                  + '  eu      - European registry mirror\n'
+                  + '  cn      - Chinese registry mirror\n'
+                  + '  default - Default registry\n'
 
 var opts
   , name
@@ -38,7 +39,7 @@ function printHelp () {
     + '\n'
     + '  Switch between different .npmrc files with ease and grace.\n\n'
     + USAGE
-    + '\n\n'
+    + '\n'
     + 'Example:\n\n'
     + '  # Creating and activating a new .npmrc called "work":\n'
     + '  $ npmrc -c work\n\n'

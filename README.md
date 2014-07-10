@@ -32,13 +32,16 @@ npmrc
   Switch between different .npmrc files with ease and grace.
 
 Usage:
-  npmrc [name]
-  npmrc -c [name]
-  npmrc -r [registry]    The [registry] could be any of these values :
-      au - Australian reistry mirror
-      eu - European registry mirror
-      cn - Chinese registry mirror
-      default - default npm registry
+  npmrc                 list all profiles
+  npmrc [name]          change npmrc profile (uses fuzzy matching)
+  npmrc -c [name]       create a new npmrc profile called name
+  npmrc -r [registry]   use an npm mirror
+
+Available mirrors for npmrc -r:
+  au      - Australian registry mirror
+  eu      - European registry mirror
+  cn      - Chinese registry mirror
+  default - Default registry
 ```
 
 #### Initialisation
