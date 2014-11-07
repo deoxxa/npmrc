@@ -58,7 +58,9 @@ function printNpmrcs () {
   fs.readlink(NPMRC, function (err, link) {
     link = link && path.basename(link)
     fs.readdirSync(NPMRC_STORE).forEach(function (npmrc) {
-      console.log(' %s %s', link == npmrc ? '*' : ' ', npmrc)
+      if (npmrc[0] !== '.') {
+        console.log(' %s %s', link == npmrc ? '*' : ' ', npmrc)
+      }
     })
   })
 }

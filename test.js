@@ -15,6 +15,7 @@ const test    = require('tape')
     , npmrc   = path.join(homedir, '.npmrc')
     , npmrcs  = path.join(homedir, '.npmrcs')
     , def     = path.join(homedir, '.npmrcs/default')
+    , dotfile = path.join(homedir, '.npmrcs/.dotfile')
 
 
 function cleanup (t) {
@@ -127,12 +128,14 @@ test('switch config', function (t) {
 
 
 test('list config', function (t) {
+  fs.writeFileSync(dotfile, '.dotfile', 'utf8')
   exec(cmd, options, function (err, stdout, stderr) {
     t.notOk(err, 'no error')
     t.equal(stderr, '', 'no stderr')
     t.ok(/Available npmrcs/.test(stdout), 'got "available" msg')
     t.ok((/\* default$/m).test(stdout), 'listed "default"')
     t.ok((/  foobar$/m).test(stdout), 'listed "foobar"')
+    t.notOk((/\.dotfile$/m).test(stdout), 'listed "dotfile"')
     t.end()
   })
 })
