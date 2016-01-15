@@ -45,8 +45,8 @@ function printHelp () {
     + '  $ npmrc -c work\n\n'
     + '  # Switch betwen "work" and "default"\n'
     + '  $ npmrc work\n'
-    + '  $ npmrc default\n'
-    + '  # Use the European npm mirror'
+    + '  $ npmrc default\n\n'
+    + '  # Use the European npm mirror\n'
     + '  $ npmrc -r eu\n'
   )
   process.exit(1)
