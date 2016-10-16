@@ -13,6 +13,10 @@ switch out your .npmrc with a specific named version. It also tries to protect
 you from your own stupid self by making sure you don't accidentally overwrite an
 .npmrc that you actually want to keep.
 
+Note (Yarn)
+--------
+If you want a similar module for Yarn package manager, feel free to use the following [yarnrc](https://github.com/vitorcamachoo/yarnrc).
+
 
 Installation
 ------------
