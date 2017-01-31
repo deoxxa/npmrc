@@ -103,7 +103,7 @@ test('create new config', function (t) {
     t.equal(fs.readFileSync(foobar, 'utf8'), '', 'got expected contents of .npmrcs/foobar')
     t.ok(fs.lstatSync(npmrc).isSymbolicLink(), '.npmrc is symlink')
     t.equal(fs.readlinkSync(npmrc), foobar, '.npmrc points to "foobar"')
-    t.deepEqual(fs.readdirSync(npmrcs), [ 'default', 'foobar' ], '"default" and "foobar" in .npmrcs')
+    t.deepEqual(fs.readdirSync(npmrcs), [ '-', 'default', 'foobar' ], '"default" and "foobar" in .npmrcs')
     t.end()
   })
 })
@@ -121,11 +121,27 @@ test('switch config', function (t) {
     t.equal(fs.readFileSync(foobar, 'utf8'), '', 'got expected contents of .npmrcs/foobar')
     t.ok(fs.lstatSync(npmrc).isSymbolicLink(), '.npmrc is symlink')
     t.equal(fs.readlinkSync(npmrc), def, '.npmrc points to "foobar"')
-    t.deepEqual(fs.readdirSync(npmrcs), [ 'default', 'foobar' ], '"default" and "foobar" in .npmrcs')
+    t.deepEqual(fs.readdirSync(npmrcs), [ '-', 'default', 'foobar' ], '"default" and "foobar" in .npmrcs')
     t.end()
   })
 })
 
+test('switch to previous config', function (t) {
+  var foobar = path.join(npmrcs, 'foobar')
+  exec(cmd + ' -', options, function (err, stdout, stderr) {
+    t.notOk(err, 'no error')
+    t.ok(/Removing old .+\Wdefault\W/.test(stdout), 'got "removing" msg')
+    t.ok(/Activating .npmrc "foobar"/.test(stdout), 'got "activating" msg')
+    t.equal(fs.readlinkSync(npmrc), foobar, '.npmrc points to "foobar"')
+    exec(cmd + ' -', options, function (err, stdout, stderr) {
+      t.notOk(err, 'no error')
+      t.ok(/Removing old .+\Wfoobar\W/.test(stdout), 'got "removing" msg')
+      t.ok(/Activating .npmrc "default"/.test(stdout), 'got "activating" msg')
+      t.equal(fs.readlinkSync(npmrc), def, '.npmrc points to "default"')
+      t.end()
+    })
+  })
+})
 
 test('list config', function (t) {
   fs.writeFileSync(dotfile, '.dotfile', 'utf8')
