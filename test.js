@@ -16,6 +16,7 @@ const test    = require('tape')
     , npmrcs  = path.join(homedir, '.npmrcs')
     , def     = path.join(homedir, '.npmrcs/default')
     , dotfile = path.join(homedir, '.npmrcs/.dotfile')
+    , version  = require('./package.json').version
 
 
 function cleanup (t) {
@@ -219,6 +220,15 @@ test('partial matching matches alphabetically', function (t) {
         t.end()
       })
     })
+  })
+})
+
+test('show version', function (t) {
+  exec(cmd + ' -v', options, function (err, stdout, stderr) {
+   t.notOk(err, 'no error')
+   t.equal(stderr, '', 'no stderr')
+   t.equal('npmrc ' + version + '\n', stdout)
+   t.end()
   })
 })
 
