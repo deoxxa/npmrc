@@ -43,7 +43,7 @@ function printHelp () {
     + 'Example:\n\n'
     + '  # Creating and activating a new .npmrc called "work":\n'
     + '  $ npmrc -c work\n\n'
-    + '  # Switch betwen "work" and "default"\n'
+    + '  # Switch between "work" and "default"\n'
     + '  $ npmrc work\n'
     + '  $ npmrc default\n'
     + '  # Use the European npm mirror'
