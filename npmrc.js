@@ -7,6 +7,7 @@ const path = require('path')
 
 const NPMRC_STORE = process.env.NPMRC_STORE || path.join(process.env.HOME || process.env.USERPROFILE, '.npmrcs')
     , NPMRC       = process.env.NPMRC || path.join(process.env.HOME || process.env.USERPROFILE, '.npmrc')
+    , NPMRC_PREV_NAME = '-'
     , registries    = {
         au: 'http://registry.npmjs.org.au/'
       , eu: 'http://registry.npmjs.eu/'
@@ -58,7 +59,7 @@ function printNpmrcs () {
   fs.readlink(NPMRC, function (err, link) {
     link = link && path.basename(link)
     fs.readdirSync(NPMRC_STORE).forEach(function (npmrc) {
-      if (npmrc[0] !== '.') {
+      if (npmrc[0] !== '.' && npmrc !== NPMRC_PREV_NAME) {
         console.log(' %s %s', link == npmrc ? '*' : ' ', npmrc)
       }
     })
@@ -77,6 +78,7 @@ function checkSymlink (stat) {
 // make the symlink
 function link (name) {
   var ln = path.join(NPMRC_STORE, name || '')
+    , prev = path.join(NPMRC_STORE, NPMRC_PREV_NAME)
     , stat
 
   if (ln == NPMRC_STORE || !fs.existsSync(ln)) {
@@ -84,12 +86,19 @@ function link (name) {
     return process.exit(1)
   }
 
+
   try {
     stat = fs.lstatSync(NPMRC)
     checkSymlink(stat)
   } catch (e) {}
 
   if (stat) {
+    try {
+      checkSymlink(fs.lstatSync(prev))
+      fs.unlinkSync(prev)
+    } catch (e) {}
+
+    fs.symlinkSync(fs.readlinkSync(NPMRC), path.join(NPMRC_STORE, NPMRC_PREV_NAME), 'file')
     console.log('Removing old .npmrc (%s)', path.basename(fs.readlinkSync(NPMRC)))
     fs.unlinkSync(NPMRC)
   }
@@ -129,8 +138,12 @@ function partialMatch(match, files) {
   }).filter(Boolean)
 
   name = process.argv.slice(2).filter(function (a) {
-    return a[0] != '-'
+    return a === NPMRC_PREV_NAME || a[0] != '-'
   })[0] // first non '-' arg
+
+  if (name === NPMRC_PREV_NAME) {
+    name = path.basename(fs.readlinkSync(path.join(NPMRC_STORE, NPMRC_PREV_NAME)))
+  }
 
   opts.filter(function (o) {
     if (o == 'c' || o == 'h' || o == 'r' || o === 'registry') // other known opts go here
