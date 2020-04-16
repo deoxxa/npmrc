@@ -133,7 +133,7 @@ function partialMatch(match, files) {
   })[0] // first non '-' arg
 
   opts.filter(function (o) {
-    if (o == 'c' || o == 'h' || o == 'r' || o === 'registry') // other known opts go here
+    if (o == 'c' || o == 'h' || o == 'r' || o == 'v' || o === 'registry') // other known opts go here
       return false
 
     console.error('Unknown option: -' + o)
@@ -186,9 +186,18 @@ if (!name && !opts.length)
 ;(function handleOPtions() {
   if (~opts.indexOf('c'))
     createNew()
+  else if (~opts.indexOf('v'))
+    showVersion()
   else if (~opts.indexOf('r') || ~opts.indexOf('registry'))
     replaceRegistry()
 }())
+
+// handle -v
+function showVersion() {
+    var json = require('./package.json')
+    process.stdout.write(json.name + ' ' + json.version + '\n');
+    process.exit(0);
+}
 
 // handle -r <name>
 function replaceRegistry() {
