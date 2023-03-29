@@ -35,6 +35,7 @@ Usage:
   npmrc                 list all profiles
   npmrc [name]          change npmrc profile (uses fuzzy matching)
   npmrc -c [name]       create a new npmrc profile called name
+  npmrc -d [name]       delete npmrc profile
   npmrc -r [registry]   use an npm mirror
 
 Available mirrors for npmrc -r:
@@ -99,6 +100,14 @@ autocomplete the profile's name.
 Removing old .npmrc (/Users/conrad/.npmrcs/work)
 Activating .npmrc 'default'
 ```
+
+#### Delete profile 
+
+```
+➜  ~  npmrc -d work
+Profile 'work' deleted.
+```
+
 
 `npmrc <name>` will also go to some lengths to make sure you don't overwrite
 anything you might care about:

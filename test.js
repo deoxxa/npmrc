@@ -4,7 +4,7 @@ const test    = require('tape')
     , fs      = require('fs')
     , rimraf  = require('rimraf')
     , mkdirp  = require('mkdirp')
-    , tmpdir  = require('os').tmpDir()
+    , tmpdir  = require('os').tmpdir()
     , exec    = require('child_process').exec
     , xtend   = require('xtend')
 
@@ -16,10 +16,24 @@ const test    = require('tape')
     , npmrcs  = path.join(homedir, '.npmrcs')
     , def     = path.join(homedir, '.npmrcs/default')
     , dotfile = path.join(homedir, '.npmrcs/.dotfile')
+    , defName = 'default'
 
 
 function cleanup (t) {
-  rimraf(homedir, t.end.bind(t))
+  rimraf.sync(homedir);
+  if(t){
+    t.end();
+  }
+}
+
+function setupHomeDirectory(profiles = [defName], activeProfile = defName){
+  mkdirp.sync(npmrcs);
+  
+  profiles.forEach(profile => {
+    fs.writeFileSync(path.join(npmrcs, profile), 'http://' + profile);
+  });
+
+  fs.symlinkSync(path.join(npmrcs, activeProfile), npmrc, 'file');
 }
 
 
@@ -219,6 +233,62 @@ test('partial matching matches alphabetically', function (t) {
         t.end()
       })
     })
+  })
+})
+
+test('delete noarg', function (t) {
+  cleanup();
+  setupHomeDirectory();
+  exec(cmd + ' -d', options, function (err, stdout, stderr) {
+    t.ok(err, 'got error')
+    t.equal(err.code, 1, 'got correct exit code')
+    t.ok(/Please, provide name of a profile you want to delete/.test(stderr), 'got expected error message')
+    t.equal(stdout, '', 'no stdout')
+    t.end()
+  })
+})
+
+test('delete non-existing profile', function (t) {
+  cleanup();
+  setupHomeDirectory();
+  exec(cmd + ' -d some-profile', options, function (err, stdout, stderr) {
+    t.ok(err, 'got error')
+    t.equal(err.code, 1, 'got correct exit code')
+    t.ok(/Can't find profile 'some-profile'\./.test(stderr), 'got expected error message')
+    t.equal(stdout, '', 'no stdout')
+    t.end()
+  })
+})
+
+test('delete active profile', function (t) {
+  cleanup();
+  setupHomeDirectory(["p1", "p2"], "p2");
+  exec(cmd + ' -d p2', options, function (err, stdout, stderr) {
+    t.ok(err, 'got error')
+    t.equal(err.code, 1, 'got correct exit code')
+    t.ok(/Active profile can not be deleted/.test(stderr), 'got expected error message')
+    t.equal(stdout, '', 'no stdout')
+    t.end()
+  })
+})
+
+test('delete profile', function (t) {
+  cleanup();
+  const profileToDelete = "p3";
+  const activeProfile = "p2";
+  const profiles = ["p1", activeProfile, profileToDelete, defName];
+  
+  setupHomeDirectory(profiles, activeProfile);
+  exec(cmd + ' -d ' + profileToDelete, options, function (err, stdout, stderr) {
+    t.notOk(err, 'no error')
+    t.equal(stderr, '', 'no stderr')
+    t.ok(new RegExp(''.concat('Profile \'', profileToDelete, '\' deleted.')).test(stdout), 'got profile deleted msg')
+    t.notOk(fs.existsSync(path.join(npmrcs, profileToDelete)), 'verified profile deletion');
+    remaningProfiles = profiles.filter(i => i !== profileToDelete).sort();
+    t.deepEqual(fs.readdirSync(npmrcs).sort(), remaningProfiles, 'remaining profile are not effected');
+    t.ok(fs.lstatSync(npmrc).isSymbolicLink(), '.npmrc is symlink')
+    t.equal(fs.readlinkSync(npmrc), path.join(npmrcs, activeProfile), 'link points to active profile');
+    t.end()
   })
 })
 

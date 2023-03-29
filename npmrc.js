@@ -17,6 +17,7 @@ const NPMRC_STORE = process.env.NPMRC_STORE || path.join(process.env.HOME || pro
                   + '  npmrc                 list all profiles\n'
                   + '  npmrc [name]          change npmrc profile (uses fuzzy matching)\n'
                   + '  npmrc -c [name]       create a new npmrc profile called name\n'
+                  + '  npmrc -d [name]       delete npmrc profile\n'
                   + '  npmrc -r [registry]   use an npm mirror\n\n'
                   + 'Available mirrors for npmrc -r:\n'
                   + '  au      - Australian registry mirror\n'
@@ -133,7 +134,7 @@ function partialMatch(match, files) {
   })[0] // first non '-' arg
 
   opts.filter(function (o) {
-    if (o == 'c' || o == 'h' || o == 'r' || o === 'registry') // other known opts go here
+    if (o == 'c' || o == 'h' || o == 'r' || o === 'registry' || o == 'd') // other known opts go here
       return false
 
     console.error('Unknown option: -' + o)
@@ -188,6 +189,8 @@ if (!name && !opts.length)
     createNew()
   else if (~opts.indexOf('r') || ~opts.indexOf('registry'))
     replaceRegistry()
+  else if (~opts.indexOf('d'))
+    deleteProfile();
 }())
 
 // handle -r <name>
@@ -245,6 +248,29 @@ function createNew () {
   fs.writeFileSync(c, '')
 }
 
+// handle delete profile
+// -d <name>
+function deleteProfile(){
+  if(!name) {
+    console.error('Please, provide name of a profile you want to delete.');
+    return printUsage();
+  }
+  var profilePath = path.join(NPMRC_STORE, name)
+  if (!fs.existsSync(profilePath)) {
+    console.error('Can\'t find profile \'%s\'.', name)
+    return process.exit(1)
+  }
+
+  var activeProfilePath = fs.readlinkSync(NPMRC);
+  var activeProfile = activeProfilePath && path.basename(activeProfilePath);
+  if(name === activeProfile){
+    console.error('Active profile can not be deleted.');
+    return process.exit(1);
+  }
+  fs.unlinkSync(profilePath);
+  console.log('Profile \'%s\' deleted.', name);
+  process.exit(0)
+}
 
 if (name) name = partialMatch(name, fs.readdirSync(NPMRC_STORE)) || name
 
