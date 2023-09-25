@@ -95,7 +95,7 @@ function link (name) {
   }
 
   console.log('Activating .npmrc "%s"', path.basename(ln))
-  fs.symlinkSync(ln, NPMRC, 'file')
+  fs.symlinkSync(ln, NPMRC, 'junction')
 }
 
 // partial match npmrc names
